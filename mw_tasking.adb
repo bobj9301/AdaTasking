@@ -15,47 +15,68 @@ package body Mw_Tasking is
       Msg_Id     : Spmw.Int32;
    begin
 
-      accept Start(Num : in Integer) do
+      accept Begin_Looping do
+        Msg_Id := 0;
+      end;
+      loop
+         select
+            accept Start(Num : in Integer) do
 
-         Spmw.Mw_Mem_Alloc(Memory_Area => Mw_Ram,
-                           Memory_Address => Message_Address,
-                           N_Bytes => Msg_Nbytes,
-                           Alignment => 1,
-                           Status => Alloc_status);
+               Put_Line("Start accepted");
 
-         Msg_Id := 3;
-         Msg_Nbytes := 1;
+               Spmw.Mw_Mem_Alloc(Memory_Area => Mw_Ram,
+                                 Memory_Address => Message_Address,
+                                 N_Bytes => Msg_Nbytes,
+                                 Alignment => 1,
+                                 Status => Alloc_status);
 
-         Status := Spmw.Mw_Msg_Send(Spmw.Channel_A,
-                                Message_Address,
-                                Msg_Nbytes,
-                                Msg_Id);
+               Msg_Id := 4;
+               Msg_Nbytes := 1;
 
-         Put_Line("Task id: " & Integer'Image(Num));
-         Local_Num := Num;
+               Put_Line("calling send");
 
-         if Local_Num < 10 then
+               Status := Spmw.Mw_Msg_Send(Spmw.Channel_A,
+                                          Message_Address,
+                                          Msg_Nbytes,
+                                          Msg_Id);
 
-            Local_Num := Local_Num + 1;
+               Put_Line("Task id: " & Integer'Image(Num));
+               Local_Num := Num;
 
-            declare
-               subtask : Task_Pool;
-            begin
-               Put_Line("starting subtask " & Integer'Image(Local_Num));
-               subtask(1).start(Local_Num);
-            end;
+               Put_Line("Subtask started");
 
-           Put_Line("Subtask started");
+            end Start;
 
-         end if;
+         or
 
-      end Start;
+            accept Report(Num : out Integer) do
 
-      accept Report(Num : out Integer) do
+               Put_Line("Report: ");
 
-         Num := Local_Num;
+               declare
+                  Bytes_Read : Int32;
+                  Message_Id : Int32;
+                  Read_Status : Mw_Status_T;
+                  Message_Address : System.Address;
+               begin
 
-      end Report;
+      --            Mw_Msg_Receive(Spmw.Channel_A,
+      --                           Message_Address,
+      --                           Bytes_Read,
+      --                           Message_Id,
+      --                           Read_Status);
+
+                  Put_Line("Message_Id read from channel_A, " & Int32'Image(Message_Id));
+
+                  Num := Local_Num;
+
+               end;
+
+            end Report;
+
+         end select;
+
+      end loop;
 
    end Simple_Task;
 

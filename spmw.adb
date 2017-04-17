@@ -64,6 +64,8 @@ package body Spmw is
 
       begin
 
+         Ada.Text_Io.Put_Line("allocating");
+
          Block_Access.all := (others =>0);
          Out_Addr := Block_Access.all'Address;
       end Alloc;
@@ -149,7 +151,7 @@ package body Spmw is
                           Alignment      : in     Int32;
                           Status         :    out Mw_Status_T) is
    begin
-
+      Put_Line("alloc");
       Memory_Address := System.Memory.Alloc(System.Memory.Size_T(N_Bytes));
       Status := Mw_Ok;
    end;
