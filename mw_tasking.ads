@@ -7,6 +7,7 @@ task type Simple_Task is
    entry Begin_Looping;
    entry Start(Num  :  in Integer);
    entry Report(Num : out Integer);
+   entry CleanUp;
 
 end Simple_Task;
 
