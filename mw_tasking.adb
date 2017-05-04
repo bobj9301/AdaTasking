@@ -1,6 +1,6 @@
 with System;
 with System.Address_Image;
-
+with Local_Types; use Local_Types;
 with Ada.Text_IO; use Ada.Text_IO;
 with Spmw; use Spmw;
 
@@ -8,20 +8,28 @@ package body Mw_Tasking is
 
    task body Simple_Task is
 
-      Local_Num : Integer;
+  --    Local_Num : Integer;
       Status : Spmw.Mw_Status_T;
       Alloc_Status : Spmw.Mw_Status_T;
 
       Message_Address : System.Address;
-      Msg_Nbytes : Spmw.Int32 := Integer'Size/8;
-      Msg_Id     : Spmw.Int32;
+      Msg_Nbytes : Int32 ; --:= Integer'Size/8;
+      Msg_Id     : Int32;
 
    begin
 
       -- block until started with call to begin_looping
 
       accept Begin_Looping do
-         Msg_Id := 0;
+       declare
+          tempVar : Integer;
+         begin
+          tempVar := 0;
+         end;
+
+       Msg_Nbytes := Integer'Size/8;
+
+
       end;
 
       loop
@@ -29,7 +37,7 @@ package body Mw_Tasking is
          select
             accept Start(Num : in Integer) do
 
-               Put_Line("Start accepted");
+               --Put_Line("Start accepted");
 
                Spmw.Mw_Mem_Alloc(Memory_Area => Mw_Ram,
                                  Memory_Address => Message_Address,
@@ -54,11 +62,7 @@ package body Mw_Tasking is
                                              Msg_Id);
                end;
 
-               Local_Num := Num;
-
-      --         Put_Line("deleting");
-
-                  Put_Line("Address Send: " & System.Address_Image(Message_Address));
+     --          Local_Num := Num;
 
                Status := Spmw.Mw_Msg_Free(Message_Address);
 
@@ -67,8 +71,6 @@ package body Mw_Tasking is
          or
 
             accept Report(Num : out Integer) do
-
-               Put_Line("Report: " & Integer'Image(Local_Num));
 
                declare
                   Bytes_Read : Int32;
@@ -84,9 +86,9 @@ package body Mw_Tasking is
                                  Message_Id,
                                  Read_Status);
 
-                  Put_Line("Report, Address Received: " & System.Address_Image(Message_Address));
+                  --Put_Line("Report, Address Received: " & System.Address_Image(Message_Address));
 
-                  Put_Line("Message_Id read from channel_A, " & Int32'Image(Message_Id));
+                  ----Put_Line("Message_Id read from channel_A, " & Int32'Image(Message_Id));
 
                   Num := Integer(Message_Id);
 
@@ -96,7 +98,7 @@ package body Mw_Tasking is
                   begin
 
                      Put_Line("Received_Message: " & Integer'Image(Received_Message));
-                     Put_Line("Report, message address: " & System.Address_Image(Received_Message'address));
+         --            Put_Line("Report, message address: " & System.Address_Image(Received_Message'address));
 
                   end;
 
@@ -113,7 +115,7 @@ package body Mw_Tasking is
 
          end select;
 
-         Put_Line("select complete");
+         --Put_Line("select complete");
 
       end loop;
 

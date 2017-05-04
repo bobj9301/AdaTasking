@@ -4,32 +4,32 @@ with System.Storage_Elements;
 with System.Address_To_Access_Conversions;
 with Ada.Unchecked_Deallocation;
 with System.Address_Image;
+with Block_Defs;
 
 with Ada.Text_Io; use Ada.Text_Io;
 
 package body Spmw is
 
+--   type Block_Type is array(Positive range <>) of Int32;
+--   pragma Pack(Block_Type);
 
-   type Block_Type is array (Positive range <>) of Int32;
-   pragma Pack(Block_Type);
+--   type Block_Access_Type is access all Block_Type;
 
-   type Block_Access_Type is access all Block_Type;
-
-   type Block_Allocation_Type is
-      record
-         Data_Address : System.Address;
-         Msg_Id       : Int32;
-         Length       : Int32;
-         Msg_Count    : Int32;
-         Allocated    : Boolean := False;
-      end record;
+--   type Block_Allocation_Type is
+--      record
+--         Data_Address : System.Address;
+--         Msg_Id       : Int32;
+--         Length       : Int32;
+--         Msg_Count    : Int32;
+--         Allocated    : Boolean := False;
+--      end record;
 
    Channel_Pool_Size : constant := 1024;
    type Channel_Pool_Ptr_Type is mod (Channel_Pool_Size - 1);
    type Channel_Allocation_Counter_Type is range 0 .. Channel_Pool_Size;
-   type Channel_Pool_Type is array (Channel_Pool_Ptr_Type) of Block_Allocation_Type;
+   type Channel_Pool_Type is array (Channel_Pool_Ptr_Type) of Block_Defs.Block_Allocation_Type;
 
-   procedure Delete_Block is new Ada.Unchecked_Deallocation(Block_Type, Block_Access_Type);
+   procedure Delete_Block is new Ada.Unchecked_Deallocation(Block_Defs.Block_Type, Block_Defs.Block_Access_Type);
 
    Msg_Count : Int32 := 0;
 
@@ -58,15 +58,17 @@ package body Spmw is
 
    end Channel;
 
+   -- ==========================================================================
+
    Channels : array(Chan_Id_T) of Channel;
-   Channel_Addresses : array(Chan_Id_T) of System.Address;
+--   Channel_Addresses : array(Chan_Id_T) of System.Address;
 
    protected body Channel is
 
       procedure Alloc(Out_Addr :    out System.Address;
                       In_Len   : in      Int32) is
 
-         Block_Access : Block_Access_Type := new Block_Type(1..Integer(In_Len));
+         Block_Access : Block_Defs.Block_Access_Type := new Block_Defs.Block_Type(1..Integer(In_Len));
 
       begin
 
@@ -156,7 +158,8 @@ package body Spmw is
                           N_Bytes        : in     Int32;
                           Alignment      : in     Int32;
                           Status         :    out Mw_Status_T) is
-      Block_Access : Block_Access_Type := new Block_Type(1..Integer(N_Bytes));
+
+      Block_Access : Block_Defs.Block_Access_Type := new Block_Defs.Block_Type(1..Integer(N_Bytes));
 
    begin
       Put_Line("alloc: " & Int32'Image(N_Bytes));
@@ -168,16 +171,16 @@ package body Spmw is
 
    -- ==========================================================================
 
-   package Block_Pointer is new System.Address_To_Access_Conversions(Block_Type);
+   package Block_Pointer is new System.Address_To_Access_Conversions(Block_Defs.Block_Type);
 
    function Mw_Msg_Free(Msg_Address : in System.Address) return Mw_Status_T Is
 
-      Block_Access : Block_Access_Type;
+      Block_Access : Block_Defs.Block_Access_Type;
 
    begin
-      Put_Line("Address Free: " & System.Address_Image(Msg_Address));
+ --     Put_Line("Address Free: " & System.Address_Image(Msg_Address));
 
-      Block_Access := Block_Access_Type(Block_Pointer.To_Pointer(Msg_Address));
+      Block_Access := Block_Defs.Block_Access_Type(Block_Pointer.To_Pointer(Msg_Address));
       Delete_Block(Block_Access);
 
       return Mw_Ok;
