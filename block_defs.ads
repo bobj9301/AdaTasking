@@ -5,19 +5,12 @@ with Local_Types; use Local_Types;
 
 package Block_Defs is
 
+   -- Used by spmw
+   -- ====================================================
    type Block_Type is array(Positive range <>) of Int32;
    pragma Pack(Block_Type);
 
-   type Block_Buffer is new Ada.Finalization.Controlled with
-      record
-         Reference_Count : Natural := 0;
-         Size : Integer := 0;
-      end record;
-
-
-
    type Block_Access_Type is access all Block_Type;
-   type Block_Buffer_Access_Type is access all Block_Buffer'Class;
 
    type Block_Allocation_Type is
       record
@@ -27,6 +20,16 @@ package Block_Defs is
          Msg_Count    : Int32;
          Allocated    : Boolean := False;
       end record;
+
+   -- ====================================================
+   -- Used by controlled types test code
+   type Block_Buffer is new Ada.Finalization.Controlled with
+      record
+         Reference_Count : Natural := 0;
+         Size : Integer := 0;
+      end record;
+
+   type Block_Buffer_Access_Type is access all Block_Buffer'Class;
 
    type Block_Buffer_Access_CType is new Ada.Finalization.Controlled with
       record
@@ -40,6 +43,8 @@ package Block_Defs is
    procedure Finalize(Block : in out Block_Buffer_Access_CType);
    procedure Initialize(Block : in out Block_Buffer_Access_CType);
    procedure Adjust(Block : in out Block_Buffer_Access_CType);
+
+   -- ====================================================
 
 end Block_Defs;
 

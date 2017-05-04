@@ -16,23 +16,23 @@ procedure tasking_main is
 
 begin
 
-   declare
-      Test_Block : Block_Defs.Block_Buffer; -- Initialize
+--   declare
+--      Test_Block : Block_Defs.Block_Buffer; -- Initialize
 
-      Test_Block2 : Block_Defs.Block_Buffer_Access_Type; --
-      Test_Block3 : Block_Defs.Block_Buffer_Access_Type; --
+--      Test_Block2 : Block_Defs.Block_Buffer_Access_Type; --
+--      Test_Block3 : Block_Defs.Block_Buffer_Access_Type; --
 
-      Test_Acc  : Block_Defs.Block_Buffer_Access_CType; -- Initialize Access
-      Test_Acc2 : Block_Defs.Block_Buffer_Access_CType; -- Initialize Access
-      Test_Addr : System.Address;
-   begin
+--      Test_Acc  : Block_Defs.Block_Buffer_Access_CType; -- Initialize Access
+--      Test_Acc2 : Block_Defs.Block_Buffer_Access_CType; -- Initialize Access
+--      Test_Addr : System.Address;
+--   begin
 
-      Test_Block2 := new Block_Defs.Block_Buffer; -- initialize
+--      Test_Block2 := new Block_Defs.Block_Buffer; -- initialize
    --   Test_Acc := new Block_Defs.Block_Buffer;
-      Test_Acc2 := Test_Acc;
-      Test_Block3 := Test_Block2; -- Adjust not called
-      Test_Addr := Test_Block2.all'address;
-   end;
+--      Test_Acc2 := Test_Acc;
+--      Test_Block3 := Test_Block2; -- Adjust not called
+--      Test_Addr := Test_Block2.all'address;
+--   end;
 
    My_Pool(1).Begin_Looping;
    My_Pool(2).Begin_Looping;
