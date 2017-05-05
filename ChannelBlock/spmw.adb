@@ -33,6 +33,8 @@ package body Spmw is
                  Out_Len  : out Int32;
                  Out_Id   : out Int32);
 
+      entry Trigger_Read_Request;
+
       procedure Alloc(Out_Addr : out System.Address;
                       In_Len   : in Int32);
 
@@ -43,6 +45,7 @@ package body Spmw is
       Next_Out : Channel_Pool_Ptr_Type   := 0;
       Count    : Channel_Allocation_Counter_Type := 0;
       Read_Empty : Boolean    := False;
+      Request_Count : Integer := 0;
 
    end Channel;
 
@@ -71,7 +74,7 @@ package body Spmw is
 
       entry Write(In_Addr : in System.Address;
                   In_Len  : in Int32;
-                  In_Id   : in Int32) when Count < (Channel_Pool_Size -1 ) is
+                  In_Id   : in Int32) when ( Request_Count > 0 and Count < (Channel_Pool_Size -1 )) is
 
       begin
 
@@ -102,6 +105,14 @@ package body Spmw is
 
       end;
 
+      entry Trigger_Read_Request when Request_Count <  1 is
+
+      begin
+
+         Request_Count := Request_Count + 1;
+
+      end;
+
    end Channel;
 
    -- ==========================================================================
@@ -129,6 +140,8 @@ package body Spmw is
                             Message_Id  :     out Int32;
                             Status      :     out Mw_Status_T) is
    begin
+
+      Channels(Chan_Id).Trigger_Read_Request;
 
       Channels(Chan_Id).Read(Out_Addr => Msg_Address,
                              Out_Len  => N_Bytes,
