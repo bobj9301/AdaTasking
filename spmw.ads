@@ -40,6 +40,11 @@ package Spmw is
                           Alignment      : in     Int32;
                           Status         :    out Mw_Status_T);
 
+  procedure Mw_Msg_Alloc(Chan_Id : in Chan_Id_T;
+                          Msg_Address : in out System.Address;
+                          N_Bytes : in Int32;
+                          Status : in out Mw_Status_T);
+
    function Mw_Msg_Free(Msg_Address : in System.Address) return Mw_Status_T;
 
 end Spmw;

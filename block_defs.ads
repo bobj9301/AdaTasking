@@ -12,6 +12,12 @@ package Block_Defs is
 
    type Block_Access_Type is access all Block_Type;
 
+   type Block_Control_Type is new Ada.Finalization.Controlled with
+      record
+         Reference_Count : Natural := 0;
+         Data_Ptr : Block_Access_Type;
+      end record;
+
    type Block_Allocation_Type is
       record
          Data_Address : System.Address;
@@ -20,6 +26,10 @@ package Block_Defs is
          Msg_Count    : Int32;
          Allocated    : Boolean := False;
       end record;
+
+   procedure Finalize(Block : in out Block_Control_Type);
+   procedure Initialize(Block : in out Block_Control_Type);
+   procedure Adjust(Block : in out Block_Control_Type);
 
    -- ====================================================
    -- Used by controlled types test code
@@ -46,6 +56,8 @@ package Block_Defs is
 
    -- ====================================================
 
+   procedure Set_Block_size( Block : in out Block_Control_Type;
+                             Size : in Int32);
 end Block_Defs;
 
 

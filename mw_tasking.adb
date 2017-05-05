@@ -37,13 +37,16 @@ package body Mw_Tasking is
          select
             accept Start(Num : in Integer) do
 
-               --Put_Line("Start accepted");
-
-               Spmw.Mw_Mem_Alloc(Memory_Area => Mw_Ram,
-                                 Memory_Address => Message_Address,
+               Spmw.Mw_Msg_Alloc(Chan_Id => Channel_A,
+                                 Msg_Address => Message_Address,
                                  N_Bytes => Msg_Nbytes,
-                                 Alignment => 1,
-                                 Status => Alloc_status);
+                                 Status => Alloc_Status);
+
+       --        Spmw.Mw_Mem_Alloc(Memory_Area => Mw_Ram,
+       --                          Memory_Address => Message_Address,
+       --                          N_Bytes => Msg_Nbytes,
+       --                          Alignment => 1,
+       --                          Status => Alloc_status);
 
                declare
 
@@ -86,10 +89,6 @@ package body Mw_Tasking is
                                  Message_Id,
                                  Read_Status);
 
-                  --Put_Line("Report, Address Received: " & System.Address_Image(Message_Address));
-
-                  ----Put_Line("Message_Id read from channel_A, " & Int32'Image(Message_Id));
-
                   Num := Integer(Message_Id);
 
                   declare
@@ -98,7 +97,6 @@ package body Mw_Tasking is
                   begin
 
                      Put_Line("Received_Message: " & Integer'Image(Received_Message));
-         --            Put_Line("Report, message address: " & System.Address_Image(Received_Message'address));
 
                   end;
 
@@ -114,8 +112,6 @@ package body Mw_Tasking is
             end CleanUp;
 
          end select;
-
-         --Put_Line("select complete");
 
       end loop;
 

@@ -38,7 +38,7 @@ begin
    My_Pool(2).Begin_Looping;
 
    my_pool(1).start(1);
---   My_Pool(1).Start(2);
+   My_Pool(1).Start(2);
    My_Pool(2).Report(Num);
 
    Put_Line("main complete");
