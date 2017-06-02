@@ -3,11 +3,19 @@ with Spmw;
 
 package mw_tasking is
 
-task type Simple_Task is
-   entry Begin_Looping(Task_Id : in Integer);
+task type Receiver_Task is
 
-end Simple_Task;
+   entry Begin_Looping(Task_id: in Integer);
 
-type Task_Pool is array(Positive range 1 .. 2) of Simple_Task;
+end Receiver_Task;
+
+task type Sender_Task is
+
+   entry Begin_Looping(Task_id: in Integer);
+
+end Sender_Task;
+
+
+-- type Task_Pool is array(Positive range 1 .. 2) of Simple_Task;
 
 end mw_tasking;

@@ -103,6 +103,8 @@ package body Spmw is
          Count := Count -1;
          Next_Out := Next_Out + 1;
 
+         Request_Count := Request_Count - 1;
+
       end;
 
       entry Trigger_Read_Request when Request_Count <  1 is
@@ -140,6 +142,7 @@ package body Spmw is
                             Message_Id  :     out Int32;
                             Status      :     out Mw_Status_T) is
    begin
+
 
       Channels(Chan_Id).Trigger_Read_Request;
 
