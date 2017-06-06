@@ -3,6 +3,7 @@ with System;
 with System.Storage_Elements;
 with System.Address_To_Access_Conversions;
 with Ada.Unchecked_Deallocation;
+with Ada.Task_Identification;
 with System.Address_Image;
 with Block_Defs;
 
@@ -15,6 +16,13 @@ package body Spmw is
    type Channel_Allocation_Counter_Type is range 0 .. Channel_Pool_Size;
    type Channel_Pool_Type is array (Channel_Pool_Ptr_Type) of Block_Defs.Block_Allocation_Type;
 
+   type Channel_Priority_Type is
+      record
+         Priority : Integer range 0..10;
+         Source   : Ada.Task_Identification.Task_Id;
+      end record;
+
+   type Priority_Array_Type is array (1..10) of Channel_Priority_Type;
 
    procedure Delete_Block is new Ada.Unchecked_Deallocation(Block_Defs.Block_Type,
                                                             Block_Defs.Block_Access_Type);
@@ -33,6 +41,8 @@ package body Spmw is
                  Out_Len  : out Int32;
                  Out_Id   : out Int32);
 
+      entry Initialize_Priority_List;
+
       entry Trigger_Read_Request;
 
       procedure Alloc(Out_Addr : out System.Address;
@@ -46,6 +56,7 @@ package body Spmw is
       Count    : Channel_Allocation_Counter_Type := 0;
       Read_Empty : Boolean    := False;
       Request_Count : Integer := 0;
+      Priority_List : Priority_Array_Type;
 
    end Channel;
 
@@ -87,6 +98,8 @@ package body Spmw is
 
          Next_In := Next_In + 1;
 
+         Request_Count := Request_Count - 1;
+
       end;
 
       -- ========= Read =====================
@@ -103,8 +116,6 @@ package body Spmw is
          Count := Count -1;
          Next_Out := Next_Out + 1;
 
-         Request_Count := Request_Count - 1;
-
       end;
 
       entry Trigger_Read_Request when Request_Count <  1 is
@@ -114,6 +125,16 @@ package body Spmw is
          Request_Count := Request_Count + 1;
 
       end;
+
+      -- ============= Initialize priority list ========
+
+      procedure Initialize_Priority_List( Reader_Count : in Integer ) is
+
+      begin
+         Priority_List(1).Priority := 1;
+         Priority_List(1).Source := "Sender";
+
+      end Initialize_Priority_List;
 
    end Channel;
 
