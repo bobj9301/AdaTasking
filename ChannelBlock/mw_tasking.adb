@@ -5,10 +5,10 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Spmw; use Spmw;
 
 package body Mw_Tasking is
-   
+
    -- Receiver_Task
    ---------------------------------------------------------------------------
-   
+
    task body Receiver_Task is
 
   --    Local_Num : Integer;
@@ -80,10 +80,10 @@ package body Mw_Tasking is
       delay 10.0;
 
    end Receiver_Task;
-   
+
    -- Sender_Task
    ---------------------------------------------------------------------------
-   
+
    task body Sender_Task is
 
   --    Local_Num : Integer;
@@ -108,18 +108,18 @@ package body Mw_Tasking is
          My_Id := Task_Id;
 
          if my_id = 2 then
-  
+
            increment := 2;
 
          elsif my_id = 3 then
-  
+
            increment := 3;
 
          elsif my_id = 4 then
            increment := 4;
          elsif my_id = 5 then
            increment :=5 ;
-         else 
+         else
            increment := 1;
          end if;
 
@@ -144,9 +144,10 @@ package body Mw_Tasking is
             begin
 
                Msg_Id := 5;
-               Output_Message := Message_To_Send;
+--               Output_Message := Message_To_Send;
+               Output_Message := Increment;
 
-               Put_Line(Integer'Image(My_ID) & " sending message: " & Int32'Image(Message_To_Send));
+               Put_Line(Integer'Image(My_ID) & " sending message: " & Int32'Image(Output_Message));
 
                Status := Spmw.Mw_Msg_Send(Spmw.Channel_A,
                                           Message_Address,
@@ -154,7 +155,7 @@ package body Mw_Tasking is
                                           Msg_Id);
             end;
 
-            Message_To_Send := Message_To_Send + increment;
+--            Message_To_Send := Message_To_Send + increment;
 
          delay 0.0;
 
