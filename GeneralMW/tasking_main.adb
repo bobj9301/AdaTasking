@@ -13,8 +13,8 @@ procedure tasking_main is
 
 begin
 
---   Task_A.Begin_Looping(1);
---   Task_B.Begin_Looping(2);
+   Task_A.Begin_Looping(1);
+   Task_B.Begin_Looping(2);
 --   Task_C.Begin_Looping(5);
 
    Put_Line("main complete");

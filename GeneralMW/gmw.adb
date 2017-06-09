@@ -32,6 +32,11 @@ package body Gmw is
 
    Channel_Manager : Channel_Manager_Task;
 
+   type Block_Type is array (Positive range <> ) of Int32;
+   pragma Pack(Block_Type);
+
+   type Block_Access_Type is access all Block_Type;
+
    -- ======================================================================================
    -- Define mw handler bodies
 

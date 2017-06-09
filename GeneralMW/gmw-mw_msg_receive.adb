@@ -15,5 +15,7 @@ begin
 
    Put_Line("Mw_Msg_Receive called");
 
+   Channel_Manager.Read_Request(Chan_Id, Msg_Address,N_Bytes,Message_Id, Status);
+
 end Mw_Msg_Receive;
 

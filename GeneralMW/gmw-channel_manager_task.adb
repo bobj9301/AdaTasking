@@ -7,10 +7,6 @@ separate (Gmw)
 
    task body Channel_Manager_Task is
 
-      Message_Received : Integer;
-      Local_Message    : Integer;
-      My_Id : Integer;
-
    begin
 
       Put_Line("Channel_Manager Task started");

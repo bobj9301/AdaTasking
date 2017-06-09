@@ -17,7 +17,8 @@ package Gmw is
       Mw_No_Message,
       Mw_Send_Failed,
       Mw_Recv_Failed,
-      Mw_Memory_Range
+      Mw_Memory_Range,
+      Mw_No_Allocation
      );
 
    -- ======================================================================================
