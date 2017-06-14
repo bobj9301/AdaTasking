@@ -5,6 +5,8 @@ with Local_Types; use Local_Types;
 
 package Gmw is
 
+   pragma Elaborate_Body;
+
    -- ======================================================================================
    -- Type Definitions
 

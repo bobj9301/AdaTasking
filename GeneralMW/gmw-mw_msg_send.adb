@@ -13,7 +13,7 @@ begin
 
    Put_Line("Mw_Msg_Send called");
 
-   Channel_Manager.Write_Request(Chan_Id, Msg_Address, N_Bytes, Message_Id);
+   Channel_Manager.Write_Request(Chan_Id)(Chan_Id, Msg_Address, N_Bytes, Message_Id);
 
    return(Mw_Ok);
 

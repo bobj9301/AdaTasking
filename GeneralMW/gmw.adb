@@ -15,16 +15,16 @@ package body Gmw is
 
    task type Channel_Manager_Task is
 
-      entry Write_Request(Chan_Id    : in Chan_Id_T;
-                          Msg_Address: in System.Address;
-                          N_Bytes    : in Int32;
-                          Message_Id : in Int32);
+      entry Write_Request(Chan_Id_T)(Chan_Id    : in Chan_Id_T;
+                                        Msg_Address: in System.Address;
+                                        N_Bytes    : in Int32;
+                                        Message_Id : in Int32);
 
-      entry Read_Request(Chan_Id : in Chan_Id_T;
-                         Msg_Address :    out System.Address;
-                         N_Bytes     :    out Int32;
-                         Message_Id  :    out Int32;
-                         Status      :    out Mw_Status_T);
+      entry Read_Request(Chan_Id_T)(Chan_Id : in Chan_Id_T;
+                                       Msg_Address :    out System.Address;
+                                       N_Bytes     :    out Int32;
+                                       Message_Id  :    out Int32;
+                                       Status      :    out Mw_Status_T);
 
    end Channel_Manager_Task;
 
