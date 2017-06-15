@@ -18,7 +18,7 @@ separate (Gmw)
 
          for I in Chan_Id_T'Range loop
 
-            select
+         --   select
 
                accept Write_Request(i)(Chan_Id    : in Chan_Id_T;
                                        Msg_Address: in System.Address;
@@ -29,7 +29,7 @@ separate (Gmw)
                   Channel_Pool(Chan_Id).Write(Msg_Address,N_Bytes,Message_Id);
 
                end Write_Request;
-            or
+       --     or
                accept Read_Request(i)(Chan_Id : in Chan_Id_T;
                                       Msg_Address :    out System.Address;
                                       N_Bytes     :    out Int32;
@@ -38,11 +38,13 @@ separate (Gmw)
 
                   Put_Line("Read_Request recieved in Channel_Manager " & Chan_Id_T'Image(I) );
 
-               end Read_Request;
-            else
-              null;
+                  Channel_Pool(Chan_Id).Read(Msg_Address, N_Bytes, Message_Id);
 
-            end select;
+               end Read_Request;
+     --       else
+     --         null;
+
+   --         end select;
 
          end loop;
 

@@ -21,7 +21,7 @@ package Gmw_Backend is
          Data_Address : System.Address;
          Msg_Id       : Int32;
          Length       : Int32;
-         Msg_Count    : Int32;
+         Msg_Count    : Int32; -- sequence number of message on this channel
       end record;
 
    type Channel_Pool_Ptr_Type is mod(Channel_Pool_Size - 1);
@@ -30,16 +30,20 @@ package Gmw_Backend is
 
    protected type Channel_Type is
 
-      procedure Write(In_Addr : in System.Address;
+      entry Write(In_Addr : in System.Address;
                   In_Len  : in Int32;
                   In_Id   : in Int32);
 
+      entry Read(Out_Addr : out System.Address;
+                 Out_Len  : out Int32;
+                 Out_Id   : out Int32);
+
    private
 
-      Pool : Channel_Pool_Type;
-      Next_In : Channel_Pool_Ptr_Type := 0;
-      Next_Out : Channel_Pool_Ptr_Type := 0;
-      Count    : Channel_Allocation_Counter_Type := 0;
+      Pool : Channel_Pool_Type;                -- Data buffer array
+      Next_In : Channel_Pool_Ptr_Type := 0;    -- Index of next buffer to fill with write
+      Next_Out : Channel_Pool_Ptr_Type := 0;   -- Index of next buffer to be read
+      Count    : Int32 := 0;                   -- Number of messages available in channel
       Request_Count : Integer := 0;
 
    end Channel_Type;
