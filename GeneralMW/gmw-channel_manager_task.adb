@@ -1,6 +1,8 @@
 with System;
 with System.Address_Image;
+with Ada.Task_Identification; use Ada.Task_Identification;
 with Ada.Text_IO; use Ada.Text_IO;
+
 with Gmw;
 with Gmw_Backend; use Gmw_Backend;
 
@@ -16,14 +18,15 @@ separate (Gmw)
 
       loop
 
-         for I in Chan_Id_T'Range loop
+         for I in Chan_Id_T'Range loop -- use task_group to order write/read requests
 
          --   select
 
                accept Write_Request(i)(Chan_Id    : in Chan_Id_T;
                                        Msg_Address: in System.Address;
                                        N_Bytes    : in Int32;
-                                       Message_Id : in Int32) do
+                                       Message_Id : in Int32;
+                                       Task_Id    : in Ada.Task_Identification.Task_Id ) do
 
                   Put_Line("Write_Request Recieved in Channel_manager " & Chan_Id_T'Image(I) );
                   Channel_Pool(Chan_Id).Write(Msg_Address,N_Bytes,Message_Id);
@@ -31,6 +34,7 @@ separate (Gmw)
                end Write_Request;
        --     or
                accept Read_Request(i)(Chan_Id : in Chan_Id_T;
+                                      Task_Id : in Ada.Task_Identification.Task_Id;
                                       Msg_Address :    out System.Address;
                                       N_Bytes     :    out Int32;
                                       Message_Id  :    out Int32;
