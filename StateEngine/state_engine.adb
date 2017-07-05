@@ -10,29 +10,62 @@ with Ada.Text_Io; use Ada.Text_Io;
 
 package body State_Engine is
 
-
-   -- ======================================================================================
-   -- Define mw handler bodies
-
---   function Mw_Msg_Send(Chan_Id    : in Chan_Id_T;
---                        Msg_Address: in System.Address;
---                        N_Bytes    : in Int32;
---                        Message_Id : in Int32) return Mw_Status_T is separate;
-
-   function State_A(Current_State : in State_Id_T) return State_Id_T is
+   function State_A_Routine return State_Id_T is
 
       Next_State : State_Id_T := State_ID_B;
 
+      type Active_States_List_A is (State_ID_A, State_ID_B);
+      type Active_MID_Types_A is (MID_A, MID_C);
+      type Active_Channels_A is (Channel_A, Channel_B, Channel_D);
+
    begin
 
-      if (Current_State = State_Engine.State_ID_C) then
+      Put_Line("In state A");
 
-         Next_State := State_ID_D;
+      for I in Active_States_List_A'First .. Active_States_List_A'Last loop
+         Put_Line("State : " & Active_States_List_A'Image(I));
+      end loop;
 
-      end if;
+      for M in Active_Mid_Types_A'First .. Active_Mid_Types_A'Last loop
+         Put_Line("MID : " & Active_Mid_Types_A'Image(M));
+      end loop;
 
       return(Next_State);
 
-   end State_A;
+   end State_A_Routine;
+
+   function State_B_Routine return State_Id_T is
+
+      Next_State : State_Id_T := State_ID_A;
+
+      type Active_States_List_B is (State_ID_C);
+      type Active_MID_Types_B is (MID_B, MID_C);
+      type Active_Channels_B is (Channel_B, Channel_D);
+
+   begin
+
+      Put_Line("In State B");
+      for I in Active_States_List_B'First .. Active_States_List_B'Last loop
+         Put_Line("State : " & Active_States_List_B'Image(I));
+      end loop;
+
+      return(Next_State);
+
+   end State_B_Routine;
+
+
+   function Generic_State return State_Id_T is
+
+      Return_State : State_Id_T;
+   begin
+
+      Put_Line("Generic: State_Entry");
+
+      Return_State := State_Routine;
+      Put_Line("Generic: State_Exit");
+
+      return(Return_State);
+
+   end Generic_State;
 
 end State_Engine;
