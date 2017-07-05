@@ -22,6 +22,13 @@ package State_Engine is
 
    function State_B_Routine return State_id_T;
 
+   type Static_Info_T is
+      record
+         Entry_Count : Integer := 0;
+         Exit_Count : Integer := 0;
+      end record;
+
+   State_Info : array (State_Id_T) of Static_Info_T;
 
 end State_Engine;
 

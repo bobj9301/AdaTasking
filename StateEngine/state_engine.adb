@@ -30,6 +30,12 @@ package body State_Engine is
          Put_Line("MID : " & Active_Mid_Types_A'Image(M));
       end loop;
 
+      State_Info(State_Id_A).Entry_count := State_Info(State_Id_A).Entry_Count + 1;
+
+      if(State_Info(State_Id_A).Entry_Count > 3) then
+         Next_State := End_Processing;
+      end if;
+
       return(Next_State);
 
    end State_A_Routine;
